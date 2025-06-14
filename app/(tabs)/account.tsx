@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingTop: 24,
+    paddingTop: 12,
     paddingBottom: 8,
     backgroundColor: '#fff',
   },
@@ -81,12 +81,12 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    paddingBottom: 24,
+    paddingBottom: 0,
     justifyContent: 'flex-start',
   },
   profileSection: {
     alignItems: 'center',
-    marginVertical: 16,
+    marginVertical: 0,
     gap: 8,
   },
   avatar: {
