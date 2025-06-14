@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import WordSettingsModal from './WordSettingsModal';
 
 interface WordItem {
   id: number;
@@ -27,12 +28,15 @@ const lists = ['List1', 'List2', 'List3'];
 const WordScreen: React.FC = () => {
   const [day, setDay] = useState<number>(1);
   const [listIndex, setListIndex] = useState<number>(0);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [displayMode, setDisplayMode] = useState('cn-en');
+  const [sortMode, setSortMode] = useState('origin');
 
   return (
     <SafeAreaView style={styles.container}>
       {/* 顶部栏 */}
       <View style={styles.header}>
-        <TouchableOpacity style={styles.headerButton}>
+        <TouchableOpacity style={styles.headerButton} onPress={() => setModalVisible(true)}>
           <Text style={styles.headerIcon}>☰</Text>
         </TouchableOpacity>
         <View style={styles.headerDayWrap}>
@@ -85,6 +89,15 @@ const WordScreen: React.FC = () => {
           </TouchableOpacity>
         ))}
       </View>
+      {/* 设置弹窗 */}
+      <WordSettingsModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        displayMode={displayMode}
+        setDisplayMode={setDisplayMode}
+        sortMode={sortMode}
+        setSortMode={setSortMode}
+      />
     </SafeAreaView>
   );
 };
