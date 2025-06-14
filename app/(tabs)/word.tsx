@@ -80,6 +80,12 @@ const WordScreen: React.FC = () => {
             </View>
           </View>
         ))}
+        {/* List 打卡按钮 */}
+        <View style={styles.checkinBtnWrap}>
+          <TouchableOpacity style={styles.checkinBtn} activeOpacity={0.8}>
+            <Text style={styles.checkinBtnText}>List 打卡</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
       {/* 底部导航栏 */}
       <View style={styles.bottomNav}>
@@ -273,5 +279,27 @@ const styles = StyleSheet.create({
     color: '#fff',
     backgroundColor: '#58728d',
     paddingHorizontal: 16,
+  },
+  checkinBtnWrap: {
+    alignItems: 'center',
+    marginTop: 12,
+    marginBottom: 24,
+  },
+  checkinBtn: {
+    backgroundColor: '#58728d',
+    borderRadius: 22,
+    paddingHorizontal: 36,
+    paddingVertical: 12,
+    shadowColor: '#58728d',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.12,
+    shadowRadius: 6,
+    elevation: 2,
+  },
+  checkinBtnText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+    letterSpacing: 1,
   },
 }); 
