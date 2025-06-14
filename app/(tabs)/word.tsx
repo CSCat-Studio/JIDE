@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { SafeAreaView, ScrollView, TouchableOpacity, useColorScheme } from 'react-native';
 import styled, { DefaultTheme } from 'styled-components/native';
 import WordSettingsModal from '../../components/WordSettingsModal';
+import { Header, HeaderButton } from '@react-navigation/elements';
 
 interface WordItem {
   id: number;
