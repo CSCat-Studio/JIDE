@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView, ScrollView, TouchableOpacity, useColorScheme } from 'react-native';
+import styled, { DefaultTheme } from 'styled-components/native';
 import WordSettingsModal from '../../components/WordSettingsModal';
 
 interface WordItem {
@@ -31,65 +32,65 @@ const WordScreen: React.FC = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [displayMode, setDisplayMode] = useState('cn-en');
   const [sortMode, setSortMode] = useState('origin');
+  const colorScheme = useColorScheme();
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* 顶部栏 */}
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.headerButton} onPress={() => setModalVisible(true)}>
-          <Text style={styles.headerIcon}>☰</Text>
-        </TouchableOpacity>
-        <View style={styles.headerDayWrap}>
+    <Container>
+      <Header>
+        <HeaderButton onPress={() => setModalVisible(true)}>
+          <HeaderIcon>☰</HeaderIcon>
+        </HeaderButton>
+        <HeaderDayWrap>
           <TouchableOpacity onPress={() => setDay(day > 1 ? day - 1 : 1)}>
-            <Text style={styles.arrow}>{'<'}</Text>
+            <Arrow>{'<'}</Arrow>
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Day {day}</Text>
+          <HeaderTitle>Day {day}</HeaderTitle>
           <TouchableOpacity onPress={() => setDay(day + 1)}>
-            <Text style={styles.arrow}>{'>'}</Text>
+            <Arrow>{'>'}</Arrow>
           </TouchableOpacity>
-        </View>
-        <TouchableOpacity style={styles.headerButton}>
-          <Text style={styles.headerIcon}>🔍</Text>
-        </TouchableOpacity>
-      </View>
-      {/* 当前List显示 */}
-      <View style={styles.currentListWrap}>
-        <TouchableOpacity style={styles.listSwitchBtn} onPress={() => setListIndex((listIndex + 1) % lists.length)}>
-          <Text style={styles.currentListText}>
-            当前列表：{lists[listIndex]} <Text style={styles.listArrow}>▼</Text>
-          </Text>
-        </TouchableOpacity>
-      </View>
-      {/* 单词列表 */}
-      <ScrollView style={styles.wordList} contentContainerStyle={{ paddingBottom: 16 }}>
+        </HeaderDayWrap>
+        <HeaderButton>
+          <HeaderIcon>🔍</HeaderIcon>
+        </HeaderButton>
+      </Header>
+
+      <CurrentListWrap>
+        <ListSwitchButton onPress={() => setListIndex((listIndex + 1) % lists.length)}>
+          <CurrentListText>
+            当前列表：{lists[listIndex]} <ListArrow>▼</ListArrow>
+          </CurrentListText>
+        </ListSwitchButton>
+      </CurrentListWrap>
+
+      <WordList contentContainerStyle={{ paddingBottom: 16 }}>
         {wordList.map((item) => (
-          <View key={item.id} style={styles.wordCard}>
-            <View style={[styles.numBox, item.starred && styles.numBoxStarred]}> 
-              {item.starred ? (
-                <Text style={styles.star}>★</Text>
-              ) : null}
-              <Text style={styles.numText}>{item.id}</Text>
-            </View>
-            <View style={styles.leftColVertical}>
-              <Text style={styles.wordCell}>{item.word}</Text>
-              <Text style={styles.posCell}>{item.pos}</Text>
-            </View>
-            <View style={styles.meaningColBox}>
-              <Text style={styles.enCell}>{item.en}</Text>
-              <Text style={styles.zhCell}>{item.zh}</Text>
-            </View>
-          </View>
+          <WordCard key={item.id}>
+            <LeftColVertical>
+              <NumBox starred={item.starred}>
+                {item.starred && <Star>★</Star>}
+                <NumText>{item.id}</NumText>
+              </NumBox>
+              <WordInfoCol>
+                <WordCell>{item.word}</WordCell>
+                <PosTagWrapper><PosTag>{item.pos}</PosTag></PosTagWrapper>
+              </WordInfoCol>
+            </LeftColVertical>
+            <MeaningColBox>
+              <EnCell>{item.en}</EnCell>
+              <ZhCell>{item.zh}</ZhCell>
+            </MeaningColBox>
+          </WordCard>
         ))}
-      </ScrollView>
-      {/* 底部导航栏 */}
-      <View style={styles.bottomNav}>
+      </WordList>
+
+      <BottomNav>
         {lists.map((l, i) => (
-          <TouchableOpacity key={l} style={styles.navItem} onPress={() => setListIndex(i)}>
-            <Text style={[styles.navText, i === listIndex && styles.activeNav]}>{l}</Text>
-          </TouchableOpacity>
+          <NavItem key={l} onPress={() => setListIndex(i)}>
+            <NavText active={i === listIndex}>{l}</NavText>
+          </NavItem>
         ))}
-      </View>
-      {/* 设置弹窗 */}
+      </BottomNav>
+
       <WordSettingsModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
@@ -98,180 +99,223 @@ const WordScreen: React.FC = () => {
         sortMode={sortMode}
         setSortMode={setSortMode}
       />
-    </SafeAreaView>
+    </Container>
   );
 };
 
-export default WordScreen;
+const Container = styled(SafeAreaView)`
+  flex: 1;
+  background-color: ${(props: { theme: DefaultTheme }) => props.theme.colors.background};
+`;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f7f8fa',
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingTop: 8,
-    paddingBottom: 4,
-    backgroundColor: '#f7f8fa',
-  },
-  headerButton: {
-    width: 40,
-    height: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  headerIcon: {
-    fontSize: 22,
-    color: '#222',
-  },
-  headerDayWrap: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  arrow: {
-    fontSize: 22,
-    color: '#b0b3b8',
-    marginHorizontal: 4,
-    fontWeight: 'bold',
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#222',
-    marginHorizontal: 8,
-  },
-  currentListWrap: {
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  listSwitchBtn: {
-    borderWidth: 1,
-    borderColor: '#d0d7e2',
-    borderRadius: 16,
-    paddingHorizontal: 16,
-    paddingVertical: 6,
-    backgroundColor: '#f7f8fa',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  currentListText: {
-    fontSize: 14,
-    color: '#58728d',
-    fontWeight: '500',
-  },
-  listArrow: {
-    fontSize: 12,
-    color: '#b0b3b8',
-    marginLeft: 2,
-  },
-  wordList: {
-    flex: 1,
-    paddingHorizontal: 10,
-  },
-  wordCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    borderRadius: 16,
-    marginBottom: 12,
-    paddingVertical: 14,
-    paddingHorizontal: 10,
-    shadowColor: '#e0e0e0',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
-    elevation: 1,
-  },
-  numBox: {
-    width: 32,
-    height: 48,
-    borderRadius: 12,
-    backgroundColor: '#eaf1fb',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 12,
-    position: 'relative',
-  },
-  numBoxStarred: {
-    backgroundColor: '#ffdbe0',
-  },
-  star: {
-    color: '#ff5a7a',
-    fontSize: 14,
-    position: 'absolute',
-    left: 4,
-    top: 4,
-  },
-  numText: {
-    fontSize: 16,
-    color: '#58728d',
-    fontWeight: 'bold',
-  },
-  leftColVertical: {
-    width: 90,
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    flexDirection: 'column',
-    marginRight: 8,
-  },
-  wordCell: {
-    fontSize: 18,
-    color: '#222',
-    fontWeight: 'bold',
-  },
-  posCell: {
-    fontSize: 13,
-    color: '#fff',
-    backgroundColor: '#8ab4f8',
-    borderRadius: 8,
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    textAlign: 'center',
-    overflow: 'hidden',
-  },
-  meaningColBox: {
-    width: 110,
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    flexDirection: 'column',
-    marginLeft: 48,
-  },
-  enCell: {
-    fontSize: 18,
-    color: '#58728d',
-  },
-  zhCell: {
-    fontSize: 18,
-    color: '#222',
-  },
-  bottomNav: {
-    flexDirection: 'row',
-    borderTopWidth: 1,
-    borderTopColor: '#e9edf1',
-    backgroundColor: '#f7f8fa',
-    paddingTop: 8,
-    paddingBottom: 12,
-    justifyContent: 'center',
-  },
-  navItem: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  navText: {
-    fontSize: 15,
-    color: '#b0b3b8',
-    fontWeight: '500',
-    paddingVertical: 4,
-    borderRadius: 8,
-  },
-  activeNav: {
-    color: '#fff',
-    backgroundColor: '#58728d',
-    paddingHorizontal: 16,
-  },
-}); 
+const Header = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background-color: ${(props: { theme: DefaultTheme }) => props.theme.colors.background};
+`;
+
+const HeaderButton = styled(TouchableOpacity)`
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+`;
+
+const HeaderIcon = styled.Text`
+  font-size: 22px;
+  color: ${(props: { theme: DefaultTheme }) => props.theme.colors.text};
+`;
+
+const HeaderDayWrap = styled.View`
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+`;
+
+const Arrow = styled.Text`
+  font-size: 22px;
+  color: ${(props: { theme: DefaultTheme }) => props.theme.colors.secondary};
+  margin-horizontal: 4px;
+  font-weight: bold;
+`;
+
+const HeaderTitle = styled.Text`
+  font-size: 18px;
+  font-weight: bold;
+  color: ${(props: { theme: DefaultTheme }) => props.theme.colors.text};
+  margin-horizontal: 8px;
+`;
+
+const CurrentListWrap = styled.View`
+  align-items: center;
+  margin-bottom: 8px;
+`;
+
+const ListSwitchButton = styled(TouchableOpacity)`
+  border-width: 1px;
+  border-color: ${(props: { theme: DefaultTheme }) => props.theme.colors.border};
+  border-radius: 16px;
+  padding-horizontal: 16px;
+  padding-vertical: 6px;
+  background-color: ${(props: { theme: DefaultTheme }) => props.theme.colors.background};
+  flex-direction: row;
+  align-items: center;
+  shadow-color: #000;
+  shadow-offset: 0px 1px;
+  shadow-opacity: 0.08;
+  shadow-radius: 2px;
+  elevation: 1;
+`;
+
+const CurrentListText = styled.Text`
+  font-size: 14px;
+  color: ${(props: { theme: DefaultTheme }) => props.theme.colors.primary};
+  font-weight: 500;
+`;
+
+const ListArrow = styled.Text`
+  font-size: 12px;
+  color: ${(props: { theme: DefaultTheme }) => props.theme.colors.secondary};
+  margin-left: 2px;
+`;
+
+const WordList = styled(ScrollView)`
+  flex: 1;
+  padding-horizontal: 10px;
+`;
+
+const WordCard = styled.View`
+  flex-direction: row;
+  align-items: center;
+  background-color: ${(props: { theme: DefaultTheme }) => props.theme.colors.card};
+  border-radius: 16px;
+  margin-bottom: 16px;
+  padding: 14px;
+  min-height: 48px;
+  shadow-color: ${(props: { theme: DefaultTheme }) => props.theme.colors.shadow};
+  shadow-offset: 0px 2px;
+  shadow-opacity: 0.08;
+  shadow-radius: 4px;
+  elevation: 1;
+`;
+
+const LeftColVertical = styled.View`
+  flex-direction: row;
+  align-items: flex-start;
+  width: 40%;
+  margin-right: 8px;
+`;
+
+const NumBox = styled.View<{ starred?: boolean }>`
+  width: 32px;
+  border-radius: 12px;
+  background-color: ${(props: { theme: DefaultTheme; starred?: boolean }) =>
+    props.starred ? props.theme.colors.starred : props.theme.colors.primaryLight};
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  align-self: stretch;
+  shadow-color: #000;
+  shadow-offset: 0px 1px;
+  shadow-opacity: 0.05;
+  shadow-radius: 2px;
+  elevation: 1;
+`;
+
+const Star = styled.Text`
+  color: ${(props: { theme: DefaultTheme }) => props.theme.colors.star};
+  font-size: 14px;
+  position: absolute;
+  left: 4px;
+  top: 4px;
+`;
+
+const NumText = styled.Text`
+  font-size: 16px;
+  color: ${(props: { theme: DefaultTheme }) => props.theme.colors.primary};
+  font-weight: bold;
+`;
+
+const WordInfoCol = styled.View`
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+const WordCell = styled.Text`
+  font-size: 16px;
+  color: ${(props: { theme: DefaultTheme }) => props.theme.colors.text};
+  font-weight: bold;
+`;
+
+const PosTagWrapper = styled.View`
+  border-radius: 12px;
+  background-color: ${(props: { theme: DefaultTheme }) => props.theme.colors.primaryLight};
+  align-self: flex-start;
+  margin-top: 6px;
+  shadow-color: #000;
+  shadow-offset: 0px 1px;
+  shadow-opacity: 0.08;
+  shadow-radius: 2px;
+  elevation: 1;
+`;
+
+const PosTag = styled.Text`
+  font-size: 13px;
+  color: ${(props: { theme: DefaultTheme }) => props.theme.colors.primary};
+  border-radius: 12px;
+  padding-horizontal: 8px;
+  padding-vertical: 2px;
+  text-align: center;
+  overflow: hidden;
+`;
+
+const MeaningColBox = styled.View`
+  flex: 1;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  margin-left: 8px;
+  gap: 6px;
+`;
+
+const EnCell = styled.Text`
+  font-size: 16px;
+  color: ${(props: { theme: DefaultTheme }) => props.theme.colors.primary};
+`;
+
+const ZhCell = styled.Text`
+  font-size: 14px;
+  color: ${(props: { theme: DefaultTheme }) => props.theme.colors.text};
+`;
+
+const BottomNav = styled.View`
+  flex-direction: row;
+  border-top-width: 1px;
+  border-top-color: ${(props: { theme: DefaultTheme }) => props.theme.colors.border};
+  background-color: ${(props: { theme: DefaultTheme }) => props.theme.colors.background};
+  padding-top: 8px;
+  padding-bottom: 12px;
+  justify-content: center;
+`;
+
+const NavItem = styled(TouchableOpacity)`
+  flex: 1;
+  align-items: center;
+`;
+
+const NavText = styled.Text<{ active?: boolean }>`
+  font-size: 15px;
+  color: ${(props: { theme: DefaultTheme; active?: boolean }) => 
+    props.active ? props.theme.colors.background : props.theme.colors.secondary};
+  font-weight: 500;
+  padding-vertical: 4px;
+  border-radius: 8px;
+  background-color: ${(props: { theme: DefaultTheme; active?: boolean }) => 
+    props.active ? props.theme.colors.primary : 'transparent'};
+  padding-horizontal: ${(props: { active?: boolean }) => props.active ? '16px' : '0'};
+`;
+
+export default WordScreen; 
