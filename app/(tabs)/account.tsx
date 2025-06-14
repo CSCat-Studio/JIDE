@@ -1,14 +1,17 @@
+import { useRouter } from 'expo-router';
 import React from 'react';
 import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, useWindowDimensions, View } from 'react-native';
 
 const AccountScreen: React.FC = () => {
   const { width } = useWindowDimensions();
+  const router = useRouter();
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         {/* 顶部设置按钮 */}
         <View style={styles.headerRightOnly}>
-          <TouchableOpacity style={styles.headerIcon}>
+          <TouchableOpacity style={styles.headerIcon} onPress={() => router.push('/sub-page/setting')}>
             <Text style={{ fontSize: 24, color: '#121717' }}>⚙️</Text>
           </TouchableOpacity>
         </View>
