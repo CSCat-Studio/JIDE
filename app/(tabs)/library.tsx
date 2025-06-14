@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import ImportWordbookModal from '../../components/ImportWordbookModal';
 
 const BookInfoCard = () => (
   <View style={styles.bookInfoCard}>
@@ -43,24 +44,38 @@ const WordLibraryItem = ({ icon, title, count, showAdd, onAdd }: { icon: string;
   </View>
 );
 
-const WordLibraryScreen: React.FC = () => (
-  <ScrollView style={styles.container}>
-    <BookInfoCard />
-    <View style={styles.tagsRow}>
-      <WordTagCard icon="⭐" label="生词本" color="#FFF9E5" />
-      <WordTagCard icon="✅" label="熟知词" color="#E5F7F6" />
-    </View>
-    <View style={styles.libraryListWrap}>
-      <View style={styles.ribbon}>
-        <Text style={styles.ribbonText}>Word Library</Text>
+const WordLibraryScreen: React.FC = () => {
+  const [importModalVisible, setImportModalVisible] = useState(false);
+
+  return (
+    <ScrollView style={styles.container}>
+      <BookInfoCard />
+      <View style={styles.tagsRow}>
+        <WordTagCard icon="⭐" label="生词本" color="#FFF9E5" />
+        <WordTagCard icon="✅" label="熟知词" color="#E5F7F6" />
       </View>
-      <WordLibraryItem icon="📚" title="我的词书" count="0/3" showAdd onAdd={() => {}} />
-      <WordLibraryItem icon="A" title="德语 A1" />
-      <WordLibraryItem icon="A" title="德语 A2" />
-      <WordLibraryItem icon="B" title="德语 B1" />
-    </View>
-  </ScrollView>
-);
+      <View style={styles.libraryListWrap}>
+        <View style={styles.ribbon}>
+          <Text style={styles.ribbonText}>Word Library</Text>
+        </View>
+        <WordLibraryItem
+          icon="📚"
+          title="我的词书"
+          count="0/3"
+          showAdd
+          onAdd={() => setImportModalVisible(true)}
+        />
+        <WordLibraryItem icon="A" title="德语 A1" />
+        <WordLibraryItem icon="A" title="德语 A2" />
+        <WordLibraryItem icon="B" title="德语 B1" />
+      </View>
+      <ImportWordbookModal
+        visible={importModalVisible}
+        onClose={() => setImportModalVisible(false)}
+      />
+    </ScrollView>
+  );
+};
 
 export default WordLibraryScreen;
 
