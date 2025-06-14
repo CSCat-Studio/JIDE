@@ -1,42 +1,45 @@
 import React from 'react';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, useWindowDimensions, View } from 'react-native';
 
 const AccountScreen: React.FC = () => {
+  const { width } = useWindowDimensions();
   return (
-    <View style={styles.container}>
-      {/* 顶部设置按钮 */}
-      <View style={styles.headerRightOnly}>
-        <TouchableOpacity style={styles.headerIcon}>
-          <Text style={{ fontSize: 24, color: '#121717' }}>⚙️</Text>
-        </TouchableOpacity>
-      </View>
-
-      <ScrollView contentContainerStyle={{ paddingBottom: 24 }}>
-        {/* 头像与昵称 */}
-        <View style={styles.profileSection}>
-          <Image
-            source={{ uri: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDwG1jqtycffQjZGDmyRXDfbfJaQaJqOoSXcE1IdKnlplqIB_1-woYXuK843F5YyBbQw8aem2xHE8TlVMNz9sarbVF7hhsPl5JPFjdCNsKTHT5Ia6YBocPLrmNb4iyvdqI9kt2jxOy1wvMQbledvwe6nG1YZJZRjZmtOELq-gdihJeXEp-1LoKjK5EYn0tw8pwG-GuiFV9NiSx9ogi0g0QtAssP1u3fzbmVEKf5i4C65NaPZeU3Kq4OmASvFZkmM7aIWE20kHq7d7I' }}
-            style={styles.avatar}
-          />
-          <Text style={styles.nickname}>Olivia</Text>
-          <Text style={styles.uid}>UID: 987654321</Text>
-        </View>
-
-        {/* 信息卡片 */}
-        <InfoCard icon="👤" title="Nickname" subtitle="Level 10" />
-        <InfoCard icon="📱" title="Phone" subtitle="+1 555-987-6543" />
-        <InfoCard icon="✉️" title="Email" subtitle="olivia.brown@email.com" />
-        <InfoCard icon="💬" title="WeChat" subtitle="立刻绑定" />
-        <InfoCard icon="" title="Apple ID" subtitle="立刻绑定" />
-
-        {/* 登出按钮 */}
-        <View style={styles.logoutWrap}>
-          <TouchableOpacity style={styles.logoutBtn}>
-            <Text style={styles.logoutText}>Log out</Text>
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        {/* 顶部设置按钮 */}
+        <View style={styles.headerRightOnly}>
+          <TouchableOpacity style={styles.headerIcon}>
+            <Text style={{ fontSize: 24, color: '#121717' }}>⚙️</Text>
           </TouchableOpacity>
         </View>
-      </ScrollView>
-    </View>
+
+        <ScrollView contentContainerStyle={styles.scrollContent}>
+          {/* 头像与昵称 */}
+          <View style={styles.profileSection}>
+            <Image
+              source={{ uri: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDwG1jqtycffQjZGDmyRXDfbfJaQaJqOoSXcE1IdKnlplqIB_1-woYXuK843F5YyBbQw8aem2xHE8TlVMNz9sarbVF7hhsPl5JPFjdCNsKTHT5Ia6YBocPLrmNb4iyvdqI9kt2jxOy1wvMQbledvwe6nG1YZJZRjZmtOELq-gdihJeXEp-1LoKjK5EYn0tw8pwG-GuiFV9NiSx9ogi0g0QtAssP1u3fzbmVEKf5i4C65NaPZeU3Kq4OmASvFZkmM7aIWE20kHq7d7I' }}
+              style={[styles.avatar, { width: width * 0.32, height: width * 0.32, borderRadius: (width * 0.32) / 2 }]}
+            />
+            <Text style={styles.nickname}>Olivia</Text>
+            <Text style={styles.uid}>UID: 987654321</Text>
+          </View>
+
+          {/* 信息卡片 */}
+          <InfoCard icon="👤" title="Nickname" subtitle="Level 10" />
+          <InfoCard icon="📱" title="Phone" subtitle="+1 555-987-6543" />
+          <InfoCard icon="✉️" title="Email" subtitle="olivia.brown@email.com" />
+          <InfoCard icon="💬" title="WeChat" subtitle="立刻绑定" />
+          <InfoCard icon="" title="Apple ID" subtitle="立刻绑定" />
+
+          {/* 登出按钮 */}
+          <View style={styles.logoutWrap}>
+            <TouchableOpacity style={styles.logoutBtn}>
+              <Text style={styles.logoutText}>Log out</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </View>
+    </SafeAreaView>
   );
 };
 
@@ -53,6 +56,10 @@ const InfoCard = ({ icon, title, subtitle }: { icon: string; title: string; subt
 );
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -62,7 +69,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingTop: 56,
+    paddingTop: 24,
     paddingBottom: 8,
     backgroundColor: '#fff',
   },
@@ -72,15 +79,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  scrollContent: {
+    flexGrow: 1,
+    paddingBottom: 24,
+    justifyContent: 'flex-start',
+  },
   profileSection: {
     alignItems: 'center',
     marginVertical: 16,
     gap: 8,
   },
   avatar: {
-    width: 128,
-    height: 128,
-    borderRadius: 64,
     backgroundColor: '#eee',
     marginBottom: 8,
   },
@@ -136,8 +145,8 @@ const styles = StyleSheet.create({
   },
   logoutWrap: {
     alignItems: 'center',
-    marginTop: 16,
-    marginBottom: 24,
+    paddingTop: 24,
+    paddingBottom: 48,
   },
   logoutBtn: {
     minWidth: 84,
