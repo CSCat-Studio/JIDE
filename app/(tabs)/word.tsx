@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import WordSettingsModal from './WordSettingsModal';
+import WordSettingsModal from '../../components/WordSettingsModal';
 
 interface WordItem {
   id: number;
