@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export const unstable_settings = {
   headerShown: false,
@@ -9,7 +9,7 @@ export const unstable_settings = {
 const SettingScreen: React.FC = () => {
   const router = useRouter();
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
       {/* 自定义标题栏 */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
@@ -45,7 +45,7 @@ const SettingScreen: React.FC = () => {
         <SettingItem title="学习提醒" showArrow />
         <SettingItem title="消息提醒" showArrow />
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 

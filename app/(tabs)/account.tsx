@@ -11,7 +11,7 @@ const AccountScreen: React.FC = () => {
       <View style={styles.container}>
         {/* 顶部设置按钮 */}
         <View style={styles.headerRightOnly}>
-          <TouchableOpacity style={styles.headerIcon} onPress={() => router.push('/sub-page/setting')}>
+          <TouchableOpacity style={styles.headerIcon} onPress={() => router.push('/(sub-page)/setting')}>
             <Text style={{ fontSize: 24, color: '#121717' }}>⚙️</Text>
           </TouchableOpacity>
         </View>
